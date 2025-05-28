@@ -6,8 +6,11 @@ import com.dusan.koncerto.model.User;
 import com.dusan.koncerto.repository.EventTicketRepository;
 import com.dusan.koncerto.repository.TicketRepository;
 import com.dusan.koncerto.repository.UserRepository;
+import com.google.zxing.WriterException;
+import com.itextpdf.text.DocumentException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -19,12 +22,15 @@ public class TicketService {
 
     private final UserRepository userRepository;
 
+    private final PdfGeneratorService pdfGeneratorService;
 
 
-    public TicketService(TicketRepository ticketRepository, EventTicketRepository eventTicketRepository, UserRepository userRepository) {
+
+    public TicketService(TicketRepository ticketRepository, EventTicketRepository eventTicketRepository, UserRepository userRepository, PdfGeneratorService pdfGeneratorService) {
         this.ticketRepository = ticketRepository;
         this.eventTicketRepository = eventTicketRepository;
         this.userRepository = userRepository;
+        this.pdfGeneratorService = pdfGeneratorService;
     }
 
     public void buyTicket(Long eventId,
@@ -72,4 +78,20 @@ public class TicketService {
         eventTicketRepository.save(eventTicket);
 
     }
+
+    public byte[] generateTicketPdf(Long ticketId) throws IOException, WriterException, DocumentException {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket not found with ID: " + ticketId)); // Or a more specific custom exception
+
+        if (ticket.getQrContent() == null || ticket.getQrContent().isEmpty()) {
+            String qrContent = "TICKET#" + ticket.getId()
+                    + ";USER#" + ticket.getUser().getId()
+                    + ";EVENT#" + ticket.getEventTicket().getEvent().getId();
+            ticket.setQrContent(qrContent);
+            ticketRepository.save(ticket); // Save if updated
+        }
+
+        return pdfGeneratorService.generateTicketPdf(ticket);
+    }
+
 }
