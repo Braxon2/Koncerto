@@ -27,19 +27,22 @@ public class Event {
 
     private String description;
 
+    private String imageURL;
+
     @OneToMany(mappedBy = "event")
     private List<EventTicket> eventTicketList;
 
     public Event() {
     }
 
-    public Event(String artist, String city, String address, String venue, LocalDateTime dateTime, String description) {
+    public Event(String artist, String city, String address, String venue, LocalDateTime dateTime, String description, String imageURL) {
         this.artist = artist;
         this.city = city;
         this.address = address;
         this.venue = venue;
         this.dateTime = dateTime;
         this.description = description;
+        this.imageURL = imageURL;
     }
 
     public Long getId() {
@@ -104,5 +107,13 @@ public class Event {
 
     public void setEventTicketList(List<EventTicket> eventTicketList) {
         this.eventTicketList = eventTicketList;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

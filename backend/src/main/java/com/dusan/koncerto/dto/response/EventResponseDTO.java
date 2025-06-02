@@ -9,6 +9,7 @@ public record EventResponseDTO(
         String address,
         String venue,
         LocalDateTime dateTime,
-        String description
+        String description,
+        String imageURL
 ) {
 }

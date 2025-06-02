@@ -23,7 +23,7 @@ import java.util.Map;
 @Service
 public class PdfGeneratorService {
 
-    private static final int QR_CODE_SIZE = 250; 
+    private static final int QR_CODE_SIZE = 250;
 
     public byte[] generateTicketPdf(Ticket ticket) throws IOException, WriterException, DocumentException {
 

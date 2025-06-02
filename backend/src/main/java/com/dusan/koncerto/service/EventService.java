@@ -8,7 +8,10 @@ import com.dusan.koncerto.model.Event;
 import com.dusan.koncerto.model.EventTicket;
 import com.dusan.koncerto.repository.EventRepository;
 import com.dusan.koncerto.repository.EventTicketRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,19 +23,31 @@ public class EventService {
 
     private final EventTicketRepository eventTicketRepository;
 
-    public EventService(EventRepository eventRepository, EventTicketRepository eventTicketRepository) {
+    private final S3Service s3Service;
+
+    public EventService(EventRepository eventRepository, EventTicketRepository eventTicketRepository, S3Service s3Service) {
         this.eventRepository = eventRepository;
         this.eventTicketRepository = eventTicketRepository;
+        this.s3Service = s3Service;
     }
 
-    public EventResponseDTO addEvent(EventRequestDTO eventDTO) {
+    public EventResponseDTO addEvent(EventRequestDTO eventDTO, MultipartFile imageFile) {
+
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = s3Service.uploadFile(imageFile); // Upload image to S3
+        }
+
+
         Event event = new Event
                 (eventDTO.artist(),
                         eventDTO.city(),
                         eventDTO.address(),
                         eventDTO.venue(),
                         eventDTO.dateTime(),
-                        eventDTO.description());
+                        eventDTO.description(),
+                        imageUrl
+                );
 
         eventRepository.save(event);
 
@@ -42,9 +57,9 @@ public class EventService {
                 event.getAddress(),
                 event.getVenue(),
                 event.getDateTime(),
-                event.getDescription());
+                event.getDescription(),
+                event.getImageURL());
     }
-
 
     public EventResponseDTO getEvent(Long eventId) throws Exception {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
@@ -59,15 +74,15 @@ public class EventService {
                 event.getAddress(),
                 event.getVenue(),
                 event.getDateTime(),
-                event.getDescription()
+                event.getDescription(),
+                event.getImageURL()
         );
 
 
     }
 
-    public List<EventResponseDTO> getAllEvent() {
-        return eventRepository.findAll()
-                .stream()
+    public Page<EventResponseDTO> getAllEvents(Pageable pageable) {
+        return eventRepository.findAll(pageable)
                 .map(event ->
                         new EventResponseDTO(
                                 event.getId(),
@@ -76,9 +91,9 @@ public class EventService {
                                 event.getAddress(),
                                 event.getVenue(),
                                 event.getDateTime(),
-                                event.getDescription())
-                )
-                .toList();
+                                event.getDescription(),
+                                event.getImageURL())
+                );
 
     }
 
@@ -145,26 +160,13 @@ public class EventService {
         /*
         napraviti proveru da li ima vec kupuljenih karata ili ima vec tip karte napravljen
 
-
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
-
-        if(!optionalEvent.isPresent()){
-            throw new Exception("No such event with that id.");
-        }
-
-        Event event = optionalEvent.get();
-
-        if(event.getEventTicketList().size() > 0 || ){
-            throw new Exception("Cannot delete event. Tickets have already been sold.");
-        }
-
         */
 
 
         eventRepository.deleteById(eventId);
     }
 
-    public List<EventTicketResponseDTO> deleteTicketfromEvent(Long eventId, Long eventTicketId) throws Exception {
+    public void deleteTicketfromEvent(Long eventId, Long eventTicketId) throws Exception {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
 
         if(!optionalEvent.isPresent()){
@@ -176,8 +178,6 @@ public class EventService {
         if(!optionalEventTicket.isPresent()){
             throw new Exception("No such event ticket with that id.");
         }
-
-
 
         Event event = optionalEvent.get();
 
@@ -191,18 +191,34 @@ public class EventService {
 
         eventTicketRepository.deleteById(eventTicketId);
 
-        return event.getEventTicketList()
-                .stream()
-                .map(ticket ->
-                        new EventTicketResponseDTO(
-                                ticket.getId(),
-                                ticket.getTicketType(),
-                                ticket.getQuantity(),
-                                ticket.getPrice()
-                        )
-                )
-                .toList();
+    }
 
+    public EventResponseDTO updateEventImage(Long eventId, MultipartFile imageFile) {
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found with ID: " + eventId));
+
+        String newImageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+             if (event.getImageURL() != null && !event.getImageURL().isEmpty()) {
+                s3Service.deleteFile(event.getImageURL());
+             }
+            newImageUrl = s3Service.uploadFile(imageFile);
+        }
+
+        event.setImageURL(newImageUrl);
+        eventRepository.save(event);
+
+        return new EventResponseDTO(
+                event.getId(),
+                event.getArtist(),
+                event.getCity(),
+                event.getAddress(),
+                event.getVenue(),
+                event.getDateTime(),
+                event.getDescription(),
+                event.getImageURL()
+        );
 
     }
 }
