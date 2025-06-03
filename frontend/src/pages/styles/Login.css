@@ -1,0 +1,133 @@
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 2px solid white;
+  margin: 50px auto;
+  width: 600px;
+  height: 400px;
+  padding: 10px 50px;
+}
+
+form {
+  width: 100%;
+}
+
+.input-container h2 {
+  color: white;
+}
+
+.input-container {
+  text-align: center;
+  display: block;
+  margin: 20px;
+  color: white;
+  height: 35px;
+}
+
+.input-container input {
+  width: 100%;
+  height: 100%;
+  border-radius: 35px;
+  padding-left: 15px;
+}
+
+.input-container p a {
+  text-decoration: none;
+  font-weight: bolder;
+  color: chartreuse;
+}
+
+.button-container {
+  margin: 20px;
+  height: 35px;
+  text-align: center;
+}
+
+.button-container button {
+  width: 100%;
+  height: 100%;
+  border-radius: 45px;
+  padding-left: 15px;
+}
+
+.button-container button:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+  font-weight: bolder;
+  color: white;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    max-width: 400px;
+    height: auto;
+    min-height: 350px;
+    margin: 20px auto;
+    padding: 20px 30px;
+  }
+
+  .input-container {
+    margin: 15px 0;
+    height: auto;
+    min-height: 35px;
+  }
+
+  .input-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .input-container input {
+    height: 45px;
+    padding-left: 20px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .input-container p {
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  .button-container {
+    margin: 20px 0;
+    height: 45px;
+  }
+
+  .button-container button {
+    height: 45px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 90%;
+    margin: 15px auto;
+    padding: 15px 20px;
+  }
+
+  .input-container h2 {
+    font-size: 1.3rem;
+  }
+
+  .input-container input {
+    height: 40px;
+    padding-left: 15px;
+  }
+
+  .button-container {
+    height: 40px;
+  }
+
+  .button-container button {
+    height: 40px;
+  }
+}
