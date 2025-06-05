@@ -4,6 +4,8 @@ import com.dusan.koncerto.dto.request.EventRequestDTO;
 import com.dusan.koncerto.dto.request.EventTicketRequestDTO;
 import com.dusan.koncerto.dto.response.EventResponseDTO;
 import com.dusan.koncerto.dto.response.EventTicketResponseDTO;
+import com.dusan.koncerto.exceptions.InvalidEventDataException;
+import com.dusan.koncerto.exceptions.NoSuchElementException;
 import com.dusan.koncerto.model.Event;
 import com.dusan.koncerto.model.EventTicket;
 import com.dusan.koncerto.repository.EventRepository;
@@ -33,10 +35,24 @@ public class EventService {
 
     public EventResponseDTO addEvent(EventRequestDTO eventDTO, MultipartFile imageFile) {
 
-        String imageUrl = null;
-        if (imageFile != null && !imageFile.isEmpty()) {
-            imageUrl = s3Service.uploadFile(imageFile); // Upload image to S3
+
+
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new InvalidEventDataException("Event image is required. Please upload an image file.");
         }
+
+
+         if (!imageFile.getContentType().startsWith("image/")) {
+             throw new InvalidEventDataException("Invalid image file type. Only image files are allowed.");
+         }
+
+         if (imageFile.getSize() > 5 * 1024 * 1024) {
+             throw new InvalidEventDataException("Image file size exceeds 5MB limit.");
+         }
+
+
+
+         String imageUrl = s3Service.uploadFile(imageFile);
 
 
         Event event = new Event
@@ -61,11 +77,11 @@ public class EventService {
                 event.getImageURL());
     }
 
-    public EventResponseDTO getEvent(Long eventId) throws Exception {
+    public EventResponseDTO getEvent(Long eventId)  {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
 
         if(!optionalEvent.isPresent()){
-            throw new Exception("No such event with that id.");
+            throw new NoSuchElementException("No such event with that id.");
         }
         Event event = optionalEvent.get();
         return new EventResponseDTO(event.getId(),

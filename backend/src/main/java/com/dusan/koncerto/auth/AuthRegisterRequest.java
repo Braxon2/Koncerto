@@ -1,13 +1,20 @@
 package com.dusan.koncerto.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotBlank;
 
 public class AuthRegisterRequest {
+
+    @NotBlank(message = "First name can not be empty")
     private String firstName;
+
+    @NotBlank(message = "Last name can not be empty")
     private String lastName;
 
+    @NotBlank(message = "Email can not be empty")
     private String email;
 
+    @NotBlank(message = "Password can not be empty")
     private String password;
 
     public String getFirstName() {

@@ -7,6 +7,7 @@ import com.dusan.koncerto.dto.response.EventResponseDTO;
 import com.dusan.koncerto.dto.response.EventTicketResponseDTO;
 import com.dusan.koncerto.service.EventService;
 import com.dusan.koncerto.service.TicketService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -34,15 +35,10 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<EventResponseDTO> createEvent(
-            @RequestParam("artist") String artist,
-            @RequestParam("city") String city,
-            @RequestParam("address") String address,
-            @RequestParam("venue") String venue,
-            @RequestParam("dateTime") @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
-            @RequestParam("description") String description,
+            @Valid @RequestPart("eventData") EventRequestDTO eventRequestDTO,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
 
-        EventRequestDTO eventRequestDTO = new EventRequestDTO(artist, city, address, venue, dateTime, description);
+
         EventResponseDTO response = eventService.addEvent(eventRequestDTO, imageFile);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -60,7 +56,7 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<EventResponseDTO> getEvent(@PathVariable Long eventId) throws Exception {
+    public ResponseEntity<EventResponseDTO> getEvent(@PathVariable Long eventId)  {
         EventResponseDTO event = eventService.getEvent(eventId);
         return ResponseEntity.ok(event);
     }
