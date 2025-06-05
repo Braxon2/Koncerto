@@ -16,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +39,6 @@ public class EventService {
 
     public EventResponseDTO addEvent(EventRequestDTO eventDTO, MultipartFile imageFile) {
 
-
-
         if (imageFile == null || imageFile.isEmpty()) {
             throw new InvalidEventDataException("Event image is required. Please upload an image file.");
         }
@@ -51,9 +52,26 @@ public class EventService {
              throw new InvalidEventDataException("Image file size exceeds 5MB limit.");
          }
 
+        LocalDate eventDate = eventDTO.dateTime().toLocalDate();
+        LocalDateTime startOfDay = eventDate.atStartOfDay();
+        LocalDateTime endOfDay = eventDate.atTime(LocalTime.MAX);
 
 
-         String imageUrl = s3Service.uploadFile(imageFile);
+        Optional<Event> existingArtistEvent = eventRepository.findByArtistAndDateTimeBetween(
+                eventDTO.artist(), startOfDay, endOfDay);
+        if (existingArtistEvent.isPresent()) {
+            throw new InvalidEventDataException("Artist '" + eventDTO.artist() + "' already has an event scheduled on " + eventDate + ".");
+        }
+
+
+        Optional<Event> existingVenueEvent = eventRepository.findByVenueAndAddressAndCityAndDateTimeBetween(
+                eventDTO.venue(), eventDTO.address(), eventDTO.city(), startOfDay, endOfDay);
+        if (existingVenueEvent.isPresent()) {
+            throw new InvalidEventDataException("Venue '" + eventDTO.venue() + "' at " + eventDTO.address() + ", " + eventDTO.city() + " is already booked on " + eventDate + ".");
+        }
+
+
+        String imageUrl = s3Service.uploadFile(imageFile);
 
 
         Event event = new Event
