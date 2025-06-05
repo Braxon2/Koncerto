@@ -6,6 +6,7 @@ import com.dusan.koncerto.dto.response.EventResponseDTO;
 import com.dusan.koncerto.dto.response.EventTicketResponseDTO;
 import com.dusan.koncerto.exceptions.InvalidEventDataException;
 import com.dusan.koncerto.exceptions.NoSuchElementException;
+import com.dusan.koncerto.exceptions.TicketExistsException;
 import com.dusan.koncerto.model.Event;
 import com.dusan.koncerto.model.EventTicket;
 import com.dusan.koncerto.repository.EventRepository;
@@ -78,6 +79,7 @@ public class EventService {
     }
 
     public EventResponseDTO getEvent(Long eventId)  {
+
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
 
         if(!optionalEvent.isPresent()){
@@ -113,11 +115,11 @@ public class EventService {
 
     }
 
-    public EventTicketResponseDTO addTicket(EventTicketRequestDTO eventTicketDTO, Long eventId) throws Exception {
+    public EventTicketResponseDTO addTicket(EventTicketRequestDTO eventTicketDTO, Long eventId)  {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
 
         if(!optionalEvent.isPresent()){
-            throw new Exception("No such event with that id.");
+            throw new NoSuchElementException("No such event with that id.");
         }
 
         Event event = optionalEvent.get();
@@ -132,7 +134,7 @@ public class EventService {
 
 
         if(event.getEventTicketList().contains(eventTicket)){
-            throw new Exception("This type of ticket already exists!");
+            throw new TicketExistsException("This type of ticket already exists!");
         }
         event.getEventTicketList().add(eventTicket);
 
@@ -149,11 +151,11 @@ public class EventService {
 
     }
 
-    public List<EventTicketResponseDTO> getAllTickets(Long eventId) throws Exception {
+    public List<EventTicketResponseDTO> getAllTickets(Long eventId)  {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
 
         if(!optionalEvent.isPresent()){
-            throw new Exception("No such event with that id.");
+            throw new NoSuchElementException("No such event with that id.");
         }
 
         Event event = optionalEvent.get();
@@ -186,13 +188,13 @@ public class EventService {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
 
         if(!optionalEvent.isPresent()){
-            throw new Exception("No such event with that id.");
+            throw new NoSuchElementException("No such event with that id.");
         }
 
         Optional<EventTicket> optionalEventTicket = eventTicketRepository.findById(eventTicketId);
 
         if(!optionalEventTicket.isPresent()){
-            throw new Exception("No such event ticket with that id.");
+            throw new NoSuchElementException("No such event ticket with that id.");
         }
 
         Event event = optionalEvent.get();
@@ -212,7 +214,7 @@ public class EventService {
     public EventResponseDTO updateEventImage(Long eventId, MultipartFile imageFile) {
 
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found with ID: " + eventId));
+                .orElseThrow(() -> new NoSuchElementException("Event not found with ID: " + eventId));
 
         String newImageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {

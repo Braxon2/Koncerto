@@ -34,12 +34,20 @@ public class GlobalExceptionHandler {
         return createResponse(ex.getMessage(),HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TicketExistsException.class)
+    public ResponseEntity<ProblemDetail> handleTicketExistsException(TicketExistsException ex) {
+        return createResponse(ex.getMessage(),HttpStatus.NOT_FOUND);
+    }
+
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
         System.err.println("An unhandled error occurred: " + ex.getMessage());
         return new ResponseEntity<>("An unexpected error occurred. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 
     private ResponseEntity<ProblemDetail> createResponse(String detail, HttpStatus status) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, detail);

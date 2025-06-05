@@ -1,5 +1,6 @@
 package com.dusan.koncerto.service;
 
+import com.dusan.koncerto.exceptions.NoSuchElementException;
 import com.dusan.koncerto.model.EventTicket;
 import com.dusan.koncerto.model.Ticket;
 import com.dusan.koncerto.model.User;
@@ -44,7 +45,7 @@ public class TicketService {
         Optional<EventTicket> optionalEventTicket = eventTicketRepository.findByEventIdAndTicketType(eventId,ticketType);
 
         if(!optionalEventTicket.isPresent()){
-            throw new Exception("No such type of ticket or event");
+            throw new NoSuchElementException("No such type of ticket or event");
         }
 
 

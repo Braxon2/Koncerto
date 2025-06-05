@@ -56,7 +56,7 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<EventResponseDTO> getEvent(@PathVariable Long eventId)  {
+    public ResponseEntity<EventResponseDTO> getEvent(@PathVariable Long eventId) {
         EventResponseDTO event = eventService.getEvent(eventId);
         return ResponseEntity.ok(event);
     }
@@ -70,14 +70,14 @@ public class EventController {
 
     @PostMapping("/{eventId}/tickets")
     public EventTicketResponseDTO addEventTicket(
-            @RequestBody EventTicketRequestDTO eventTicketDTO,
+            @Valid @RequestBody EventTicketRequestDTO eventTicketDTO,
             @PathVariable Long eventId
     ) throws Exception {
         return eventService.addTicket(eventTicketDTO, eventId);
     }
 
     @GetMapping("/{eventId}/tickets")
-    public List<EventTicketResponseDTO> getAllTicketsfromEvent(@PathVariable Long eventId) throws Exception {
+    public List<EventTicketResponseDTO> getAllTicketsfromEvent(@PathVariable Long eventId)  {
         return eventService.getAllTickets(eventId);
     }
 
@@ -97,7 +97,7 @@ public class EventController {
     @PostMapping("/{eventId}/buy")
     public ResponseEntity<?> buyTicket(
             @PathVariable Long eventId,
-            @RequestBody BuyTicketRequestDTO request,
+            @Valid @RequestBody BuyTicketRequestDTO request,
             Authentication authentication
     ) throws Exception {
 
