@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./styles/Login.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import usePost from "../hooks/usePost";
 
@@ -12,15 +13,26 @@ const Login = () => {
 
   const { data, error, loading, post } = usePost();
 
+  const { login, isAuthenticated } = useAuth();
+
+  const hasNavigatedAfterLogin = useRef(false);
+
   useEffect(() => {
-    if (data) {
+    if (data && !hasNavigatedAfterLogin.current) {
       console.log("Login successful:", data);
-      localStorage.setItem("jwtToken", data.jwt);
-      localStorage.setItem("userRole", data.role);
-      localStorage.setItem("userId", data.id);
+      login(data.jwt, data.role, data.id);
+
+      hasNavigatedAfterLogin.current = true;
+
       navigate("/");
     }
-  }, [data, navigate]);
+  }, [data, navigate, login]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
