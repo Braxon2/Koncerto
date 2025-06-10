@@ -1,6 +1,8 @@
 package com.dusan.koncerto.service;
 
 import com.dusan.koncerto.dto.response.TicketDTO;
+import com.dusan.koncerto.dto.response.UserResponseDTO;
+import com.dusan.koncerto.exceptions.NoSuchElementException;
 import com.dusan.koncerto.model.Event;
 import com.dusan.koncerto.model.EventTicket;
 import com.dusan.koncerto.model.Ticket;
@@ -26,7 +28,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userId);
 
         if(!optionalUser.isPresent()){
-            throw new Exception("User does not exist with this ID.");
+            throw new NoSuchElementException("User does not exist with this ID.");
         }
 
         User user = optionalUser.get();
@@ -49,5 +51,17 @@ public class UserService {
                             eventTicket.getPrice(),
                             ticket.getQrContent());
                 }).toList();
+    }
+
+    public UserResponseDTO getUser(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if(!optionalUser.isPresent()){
+            throw new NoSuchElementException("User does not exist with this ID.");
+        }
+
+        User user = optionalUser.get();
+
+        return new UserResponseDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
     }
 }

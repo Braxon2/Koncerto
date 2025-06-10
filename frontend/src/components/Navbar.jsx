@@ -32,9 +32,11 @@ const Navbar = () => {
             <li>
               <a href="/">Home</a>
             </li>
-            <li>
-              <a href="/profile">Profile</a>
-            </li>
+            {!isAdmin && (
+              <li>
+                <Link to="/profile">Profile</Link>
+              </li>
+            )}
             {isAdmin && (
               <li>
                 <Link to="/events/create">Create event</Link>

@@ -1,6 +1,7 @@
 package com.dusan.koncerto.controllers;
 
 import com.dusan.koncerto.dto.response.TicketDTO;
+import com.dusan.koncerto.dto.response.UserResponseDTO;
 import com.dusan.koncerto.model.Ticket;
 import com.dusan.koncerto.repository.UserRepository;
 import com.dusan.koncerto.service.UserService;
@@ -26,6 +27,11 @@ public class UserController {
     @GetMapping("/{userId}/tickets")
     public List<TicketDTO> getALlTickets(@PathVariable Long userId) throws Exception {
         return userService.getAllTickets(userId);
+    }
+
+    @GetMapping("/{userId}")
+    public UserResponseDTO getUser(@PathVariable Long userId) throws Exception {
+        return userService.getUser(userId);
     }
 
 

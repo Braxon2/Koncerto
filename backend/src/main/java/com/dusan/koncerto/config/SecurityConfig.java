@@ -38,6 +38,8 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/events").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/events/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/*/tickets").hasAuthority(Role.USER.getAuthority())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/*").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/events/**").hasAnyAuthority(Role.ADMIN.getAuthority())
 
@@ -48,7 +50,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/events/**").hasAnyAuthority(Role.ADMIN.getAuthority())
 
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/*/tickets").hasAuthority(Role.USER.getAuthority())
+
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session ->

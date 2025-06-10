@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Register from "./pages/Register";
 import EventDetailsPage from "./pages/EventDetailsPage ";
 import CreateEventPage from "./pages/CreateEventPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/events/:id" element={<EventDetailsPage />} />
           <Route path="/events/create" element={<CreateEventPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
     </BrowserRouter>
