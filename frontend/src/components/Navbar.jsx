@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./styles/Navbar.css";
 
@@ -37,7 +37,7 @@ const Navbar = () => {
             </li>
             {isAdmin && (
               <li>
-                <a href="/create-event">Create event</a>
+                <Link to="/events/create">Create event</Link>
               </li>
             )}
             <li>

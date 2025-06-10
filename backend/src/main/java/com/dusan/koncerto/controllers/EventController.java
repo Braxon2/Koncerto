@@ -63,7 +63,7 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<Page<EventResponseDTO>> getAllEvents(
-            @PageableDefault(size = 9, page = 0, sort = "dateTime") Pageable pageable) {
+            @PageableDefault(size = 8, page = 0, sort = "dateTime") Pageable pageable) {
         Page<EventResponseDTO> eventsPage = eventService.getAllEvents(pageable);
         return ResponseEntity.ok(eventsPage);
     }

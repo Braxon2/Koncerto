@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 
-const useFetchPagination = (url, initialPage = 0, size = 9) => {
+const useFetchPagination = (url, initialPage = 0, size = 8) => {
   const { isAuthenticated } = useAuth();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
