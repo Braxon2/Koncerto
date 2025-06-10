@@ -36,7 +36,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/tickets/**").hasAuthority(Role.USER.getAuthority())
                         .requestMatchers(HttpMethod.POST, "/api/v1/events").hasAnyAuthority(Role.ADMIN.getAuthority())
 
-                        .requestMatchers(HttpMethod.GET, "/api/v1/events").hasAnyAuthority(Role.ADMIN.getAuthority())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/events").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/events/*").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/v1/events/**").hasAnyAuthority(Role.ADMIN.getAuthority())
 

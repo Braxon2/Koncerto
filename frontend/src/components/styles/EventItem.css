@@ -1,35 +1,66 @@
+.event-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .event-card {
   background-color: #fff;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  text-align: center;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .event-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.event-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
 }
 
 .event-image img {
   width: 100%;
-  height: 300px;
+  height: 100%;
   object-fit: contain;
-  background-color: rgba(0, 0, 0, 0.4);
+  display: block;
 }
 
 .event-card h2 {
-  font-size: 1.2rem;
-  margin: 16px 0 8px;
+  font-size: 1.5em;
+  margin: 15px;
+  color: #333;
+  text-align: center;
 }
 
 .event-card p {
-  font-size: 1rem;
+  font-size: 0.9em;
   color: #666;
-  margin-bottom: 16px;
+  margin: 0 15px 15px;
+  text-align: center;
 }
 
-#buy_ticket {
-  margin-bottom: 20px;
-  font-size: 1.2rem;
+.buy-tickets-button-item {
+  display: block;
+  width: calc(100% - 30px);
+  padding: 10px 0;
+  margin: 0 15px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.buy-tickets-button-item:hover {
+  background-color: #0056b3;
 }

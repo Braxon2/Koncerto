@@ -20,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     if (data && !hasNavigatedAfterLogin.current) {
       console.log("Login successful:", data);
-      login(data.jwt, data.role, data.id);
+      login(data.token, data.role, data.id);
 
       hasNavigatedAfterLogin.current = true;
 
