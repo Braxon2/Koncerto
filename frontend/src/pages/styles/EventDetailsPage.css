@@ -33,6 +33,7 @@
   color: #333;
 }
 
+/* --- Existing styles for Ticket Selection (User View) --- */
 .ticket-selection {
   margin-top: 40px;
   padding: 30px;
@@ -49,11 +50,13 @@
   text-align: center;
 }
 
-.ticket-selection .form-group {
+.form-group {
+  /* Reused for both sections */
   margin-bottom: 20px;
 }
 
-.ticket-selection label {
+.form-group label {
+  /* Reused for both sections */
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
@@ -62,6 +65,7 @@
 
 .ticket-dropdown,
 .quantity-input {
+  /* Reused for ticket selection */
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
@@ -102,11 +106,75 @@
   background-color: #0056b3;
 }
 
+/* --- New styles for Admin Add Ticket Form --- */
+.admin-ticket-form-section {
+  margin-top: 40px;
+  padding: 30px;
+  background-color: #e6f7ff; /* Light blue background for admin form */
+  border-radius: 8px;
+  border: 1px solid #91d5ff; /* Blue border */
+  text-align: left;
+}
+
+.admin-ticket-form-section h2 {
+  font-size: 2em;
+  color: #0056b3; /* Darker blue heading */
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.form-input {
+  /* General input style, can be used for text and number */
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #a9d9ee; /* Light blue border */
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+.add-ticket-button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #28a745; /* Green for adding */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: background-color 0.3s ease;
+}
+
+.add-ticket-button:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.add-ticket-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  /* Reused for both sections */
+  color: #d9534f;
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Responsive adjustments */
 @media (max-width: 600px) {
-  .ticket-selection {
+  .ticket-selection,
+  .admin-ticket-form-section {
     padding: 20px;
   }
-  .quantity-input {
+  .quantity-input,
+  .form-input {
     max-width: 100%;
   }
   .total-price {
