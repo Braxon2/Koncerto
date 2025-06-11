@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/events/*/tickets/*").hasAuthority(Role.ADMIN.getAuthority())
 
 
-                        .requestMatchers(HttpMethod.GET, "/api/v1/events/**").hasAnyAuthority(Role.ADMIN.getAuthority())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/events/**").permitAll()
 
 
                         .anyRequest().permitAll()
