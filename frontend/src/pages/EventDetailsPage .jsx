@@ -15,7 +15,6 @@ const EventDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- MODIFICATION 1: Change initial states to strings ---
   const [newTicketType, setNewTicketType] = useState("");
   const [newTicketQuantity, setNewTicketQuantity] = useState("5");
   const [newTicketPrice, setNewTicketPrice] = useState("1000");
@@ -214,8 +213,8 @@ const EventDetailsPage = () => {
 
     const newTicketData = {
       ticketType: newTicketType.trim(),
-      quantity: parsedQuantity, // Use parsed value
-      price: parsedPrice, // Use parsed value
+      quantity: parsedQuantity,
+      price: parsedPrice,
     };
 
     console.log("Attempting to add new ticket type with data:", newTicketData);
